@@ -1,14 +1,26 @@
 <?php
 
+use App\Livewire\Chats;
+use App\Livewire\MessageBox;
+use App\Livewire\Profile;
+use App\Livewire\Settings;
+use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::get('/', Welcome::class)
+    ->middleware(['auth'])
+    ->name('welcome');
 
-Route::view('profile', 'profile')
+Route::get("/chat/{chat}", MessageBox::class)
+    ->middleware(['auth'])
+    ->name('chat');
+
+Route::get("/settings", Settings::class)
+    ->middleware(['auth'])
+    ->name('settings');
+
+Route::get("/profile", Profile::class)
     ->middleware(['auth'])
     ->name('profile');
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckChatParticipant;
 use App\Livewire\Chats;
 use App\Livewire\MessageBox;
 use App\Livewire\Profile;
@@ -13,7 +14,7 @@ Route::get('/', Welcome::class)
     ->name('welcome');
 
 Route::get("/chat/{chat}", MessageBox::class)
-    ->middleware(['auth'])
+    ->middleware(['auth', CheckChatParticipant::class])
     ->name('chat');
 
 Route::get("/settings", Settings::class)

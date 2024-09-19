@@ -61,7 +61,7 @@ class Chats extends Component
         $this->chats = $chats;
     }
 
-    public function leaveChat($chatId): void
+    public function leaveChat($chatId)
     {
         $chat = Chat::findOrFail($chatId);
 
@@ -78,6 +78,10 @@ class Chats extends Component
 
         // Detach the messages only for the specific chat from the pivot table
         auth()->user()->messages()->detach($messageIds);
+
+        if ($this->selectedChatId == $chat->id) {
+            $this->redirectRoute("welcome");
+        }
 
         // Reload the chats
         $this->loadChats();
@@ -101,8 +105,6 @@ class Chats extends Component
 
         if ($paths[0] === "chat") {
             $this->selectedChatId = $paths[1];
-            Log::info("going");
-
         }
     }
 

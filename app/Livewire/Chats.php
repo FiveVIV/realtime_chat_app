@@ -19,7 +19,7 @@ class Chats extends Component
 
     public $slot;
 
-    public int $selectedChatId;
+    public ?int $selectedChatId = null;
 
     public function mount(): void
     {
@@ -79,7 +79,7 @@ class Chats extends Component
         // Detach the messages only for the specific chat from the pivot table
         auth()->user()->messages()->detach($messageIds);
 
-        if ($this->selectedChatId == $chat->id) {
+        if ($this->selectedChatId) {
             $this->redirectRoute("welcome");
         }
 

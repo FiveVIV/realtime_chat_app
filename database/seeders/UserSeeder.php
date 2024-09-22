@@ -39,7 +39,117 @@ class UserSeeder extends Seeder
                 "name" => "User Five",
                 "email" => "user5@gmail.com",
                 "password" => Hash::make("password"),
-            ]
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
+            [
+                "name" => fake()->name(),
+                "email" => fake()->unique()->safeEmail(),
+                "password" => Hash::make("password"),
+            ],
         ]);
     }
 }

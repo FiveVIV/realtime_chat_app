@@ -90,43 +90,63 @@
         <div class="w-full h-20 bg-slate-950 absolute bottom-0 left-0 p-4 flex justify-between align-middle">
             <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
 
-            <div x-data="{ accountOptionsDropdown: false }" @click.away="accountOptionsDropdown = false">
-                <div class="relative inline-block text-left">
-                    <div>
-                        <button x-ref="button" @click="accountOptionsDropdown = !accountOptionsDropdown" class="size-10 rounded-full my-auto text-gray-400 hover:bg-gray-300 hover:text-black">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                            </svg>
-                        </button>
-                    </div>
 
-                    <!--
-                      Dropdown menu, show/hide based on menu state.
+            <div class="flex space-x-3 my-auto">
 
-                      Entering: "transition ease-out duration-100"
-                        From: "transform opacity-0 scale-95"
-                        To: "transform opacity-100 scale-100"
-                      Leaving: "transition ease-in duration-75"
-                        From: "transform opacity-100 scale-100"
-                        To: "transform opacity-0 scale-95"
-                    -->
-                    <div x-anchor.offset.10="$refs.button" x-show="accountOptionsDropdown" class="absolute right-0 mb-10 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1"
-                         x-transition:enter="transition ease-out duration-100"
-                         x-transition:enter-start="transform opacity-0 scale-95"
-                         x-transition:enter-end="transform opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-75"
-                         x-transition:leave-start="transform opacity-100 scale-100"
-                         x-transition:leave-end="transform opacity-0 scale-95"
-                         style="display: none;"
-                    >
-                        <div class="py-1" role="none">
-                            <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                            <x-dropdown-link :href="route('profile')" wire:navigate {{--:active="request()->routeIs('dashboard')"--}}>Profile</x-dropdown-link>
-                            <x-dropdown-link :href="route('settings')" wire:navigate {{--:active="request()->routeIs('dashboard')"--}}>Settings</x-dropdown-link>
+                {{-- Friend list --}}
+                <a href="{{ route("friend.list") }}" wire:navigate class="size-12 grid place-items-center rounded-full text-gray-400 hover:bg-gray-300 hover:text-black relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                    </svg>
+                    @if (auth()->user()->hasFriendRequests())
+                        <span class="animate-ping absolute -right-1 -top-1 block size-4 rounded-full bg-[#ff0000]">
+                    </span>
 
+                        <span class="absolute -right-1 -top-1 block size-4 rounded-full bg-[#ff0000]">
+                    </span>
+                    @endif
+                </a>
+
+                {{-- Add chat --}}
+                <button class="size-12 grid place-items-center rounded-full text-gray-400 hover:bg-gray-300 hover:text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
+
+
+
+
+                {{-- Settings Drop(UP)down --}}
+                <div x-data="{ accountOptionsDropdown: false }" @click.away="accountOptionsDropdown = false">
+                    <div class="relative inline-block text-left">
+                        <div>
+                            <button x-ref="button" @click="accountOptionsDropdown = !accountOptionsDropdown" class="size-12 grid place-items-center rounded-full my-auto text-gray-400 hover:bg-gray-300 hover:text-black">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div x-anchor.offset.10="$refs.button" x-show="accountOptionsDropdown" class="absolute right-0 mb-10 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1"
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             style="display: none;"
+                        >
+                            <div class="py-1" role="none">
+                                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                                <x-dropdown-link :href="route('profile')" wire:navigate :active="request()->routeIs('profile')">Profile</x-dropdown-link>
+                                <x-dropdown-link :href="route('settings')" wire:navigate :active="request()->routeIs('settings')">Settings</x-dropdown-link>
+
+                            </div>
                         </div>
                     </div>
-                </div>
+            </div>
+
 
 
 

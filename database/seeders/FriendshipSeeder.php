@@ -15,20 +15,20 @@ class FriendshipSeeder extends Seeder
     {
         DB::table('friendships')->insert([
             [
-                "sender_id" => 2,
-                "friend_id" => 1,
+                "sender_id" => 1,
+                "friend_id" => 2,
                 "accepted" => false,
                 "created_at" => now(),
             ],
             [
-                "sender_id" => 3,
-                "friend_id" => 1,
+                "sender_id" => 1,
+                "friend_id" => 3,
                 "accepted" => false,
                 "created_at" => now(),
             ],
             [
-                "sender_id" => 4,
-                "friend_id" => 1,
+                "sender_id" => 1,
+                "friend_id" => 4,
                 "accepted" => false,
                 "created_at" => now(),
             ],

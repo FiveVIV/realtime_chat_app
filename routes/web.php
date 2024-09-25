@@ -39,8 +39,7 @@ Route::prefix("notification")->group(function ( ) {
     Route::post('/basic', function () {
         $message = request('message');
 
-        // Render the Blade component and return it
-        return view('components.basic-notification', ['message' => $message])->render();
+        return view('components.notifications.basic', ['message' => $message])->render();
     });
 });
 

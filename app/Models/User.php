@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cassandra\Exception\AlreadyExistsException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,7 +47,7 @@ class User extends Authenticatable
     // Friends that this user sent friend requests to (initiated friendships)
     public function friends(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'friendships', 'friend_id', 'sender_id')
+        return $this->belongsToMany(User::class, 'friendships', 'sender_id', 'friend_id')
             ->wherePivot('accepted', true)
             ->withTimestamps();
     }
@@ -68,10 +69,10 @@ class User extends Authenticatable
     // All accepted friendships where this user is either the sender or the receiver
     public function allFriends(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'friendships', 'sender_id', 'friend_id')
+        return $this->belongsToMany(User::class, 'friendships', 'friend_id', 'sender_id')
             ->wherePivot('accepted', true)
             ->withTimestamps()
-            ->union($this->belongsToMany(User::class, 'friendships', 'friend_id', 'sender_id')
+            ->union($this->belongsToMany(User::class, 'friendships', 'sender_id', 'friend_id')
                 ->wherePivot('accepted', true)
                 ->withTimestamps());
     }
@@ -87,14 +88,16 @@ class User extends Authenticatable
         $this->friendRequests()->detach($sendersId);
     }
 
-    public function sendFriendRequest($friendId): void
+    public function sendFriendRequest($friendId)
     {
         // Check if the friend request already exists
-        $existingRequest = $this->friends()->wherePivot('friend_id', $friendId)->exists();
+        $existingRequest = $this->friends()->wherePivot('sender_id', $friendId)->exists();
 
         if (!$existingRequest) {
             // Add a new friend request (pending)
             $this->friends()->attach($friendId, ['accepted' => false]);
+        } else {
+            return response("Friendship already exists or has been requested", 409);
         }
     }
 

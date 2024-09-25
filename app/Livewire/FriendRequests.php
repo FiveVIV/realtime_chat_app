@@ -23,11 +23,16 @@ class FriendRequests extends Component
     }
 
 
-    public function acceptFriendRequest($senderId): void
+    public function acceptFriendRequest($friendId): void
     {
-        auth()->user()->acceptFriendRequest($senderId);
+        auth()->user()->acceptFriendRequest($friendId);
 
         $this->loadFriendRequests();
+    }
+
+    public function rejectFriendRequest($senderId): void
+    {
+        auth()->user()->rejectFriendRequest($senderId);
     }
 
 

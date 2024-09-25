@@ -61,11 +61,11 @@
                     <h2 class="mt-2 text-base font-semibold leading-6 text-gray-900">Add new friends</h2>
                     <p class="mt-1 text-sm text-gray-500">You haven't added any friends yet! find one of your friends or find new friends with the random friend searcher down below!</p>
                 </div>
-                <form action="#" class="mt-6 flex">
+                <div class="mt-6 flex">
                     <label for="email" class="sr-only">Email address</label>
-                    <input type="email" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Enter an email">
-                    <button type="submit" class="ml-4 flex-shrink-0 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send invite</button>
-                </form>
+                    <input wire:model="email" type="email" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Enter an email">
+                    <button wire:click="sendFriendRequest" type="button" class="ml-4 flex-shrink-0 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Send invite</button>
+                </div>
             </div>
             <div class="mt-10">
                 <div class="flex justify-between">
@@ -89,11 +89,11 @@
                                 </div>
                             </div>
                             <div class="flex-shrink-0">
-                                <button type="button" class="inline-flex items-center gap-x-1.5 text-sm font-semibold leading-6 text-gray-900">
+                                <button wire:click="sendFriendRequest({{ $randomNonFriend->id }})" type="button" class="inline-flex items-center gap-x-1.5 text-sm font-semibold leading-6 text-gray-900">
                                     <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                                     </svg>
-                                    Invite <span class="sr-only">Lindsay Walton</span>
+                                    Invite <span class="sr-only">{{ $randomNonFriend->name }}</span>
                                 </button>
                             </div>
                         </li>
@@ -101,24 +101,5 @@
                 </ul>
             </div>
         </div>
-
-
     @endif
-
-
 </x-layouts.friends>
-
-
-
-
-@script
-<script>
-
-    Livewire.on("");
-
-
-
-        showNotification("123");
-</script>
-@endscript
-

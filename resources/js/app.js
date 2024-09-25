@@ -4,6 +4,9 @@ import anchor from '@alpinejs/anchor';
 
 Alpine.plugin(anchor);
 
+/*
+window.activeNotifications = [];
+
 window.showNotification = message => {
     $.ajax({
         url: '/notification/basic',
@@ -14,10 +17,16 @@ window.showNotification = message => {
         },
         success: function (response) {
             // Inject the rendered Blade component into a DOM element
-            $('#notification-box').html(response);
+            activeNotifications.push(response);
+            $('#notification-box').append(response);
         },
         error: function (error) {
             console.log("Error:", error);
         }
     });
 }
+
+window.closeNotification = message => {
+
+}
+*/

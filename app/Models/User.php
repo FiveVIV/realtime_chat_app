@@ -44,61 +44,33 @@ class User extends Authenticatable
         return $this->belongsToMany(Chat::class);
     }
 
-    // Friends that this user sent friend requests to (initiated friendships)
-    public function friends(): BelongsToMany
+
+    public function friendsTo()
     {
         return $this->belongsToMany(User::class, 'friendships', 'sender_id', 'friend_id')
-            ->wherePivot('accepted', true)
+            ->withPivot(['id', 'accepted'])
             ->withTimestamps();
     }
 
-    // Friend requests this user received but has not yet accepted
-    public function friendRequests(): BelongsToMany
+    public function friendsFrom()
     {
         return $this->belongsToMany(User::class, 'friendships', 'friend_id', 'sender_id')
-            ->wherePivot('accepted', false)
+            ->withPivot(['id', 'accepted'])
             ->withTimestamps();
     }
 
-    public function hasFriendRequests(): bool
+    public function pendingFriendRequestsTo()
     {
-        // Check if the current user has any pending friend requests
-        return $this->friendRequests()->exists();
+        return $this->friendsTo()->wherePivot('accepted', false);
     }
 
-    // All accepted friendships where this user is either the sender or the receiver
-    public function allFriends(): BelongsToMany
+
+    public function pendingFriendRequestsFrom()
     {
-        return $this->belongsToMany(User::class, 'friendships', 'friend_id', 'sender_id')
-            ->wherePivot('accepted', true)
-            ->withTimestamps()
-            ->union($this->belongsToMany(User::class, 'friendships', 'sender_id', 'friend_id')
-                ->wherePivot('accepted', true)
-                ->withTimestamps());
+        return $this->friendsFrom()->wherePivot('accepted', false);
     }
 
-    // To accept a friend request
-    public function acceptFriendRequest($sendersId): void
-    {
-        $this->friendRequests()->updateExistingPivot($sendersId, ['accepted' => true]);
-    }
 
-    public function rejectFriendRequest($sendersId): void
-    {
-        $this->friendRequests()->detach($sendersId);
-    }
 
-    public function sendFriendRequest($friendId)
-    {
-        // Check if the friend request already exists
-        $existingRequest = $this->friends()->wherePivot('sender_id', $friendId)->exists();
-
-        if (!$existingRequest) {
-            // Add a new friend request (pending)
-            $this->friends()->attach($friendId, ['accepted' => false]);
-        } else {
-            return response("Friendship already exists or has been requested", 409);
-        }
-    }
 
 }

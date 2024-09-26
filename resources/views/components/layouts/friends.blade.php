@@ -19,7 +19,9 @@
                     <div class="hidden sm:block">
                         <nav class="-mb-px flex space-x-8">
                             <x-card-header-link :href="route('friend.list')" :active="request()->routeIs('friend.list')" wire:navigate>List</x-card-header-link>
-                            <x-card-header-link :href="route('friend.requests')" :active="request()->routeIs('friend.requests')" wire:navigate :ping="auth()->user()->hasFriendRequests()">Requests</x-card-header-link>
+                            <x-card-header-link :href="route('friend.requests')" :active="request()->routeIs('friend.requests')" wire:navigate :ping="!\App\Services\FriendService::hasFriendRequests()">Requests</x-card-header-link>
+                            <x-card-header-link :href="route('friend.pending')" :active="request()->routeIs('friend.pending')" wire:navigate>Pending</x-card-header-link>
+
                         </nav>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Services\FriendService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Component;
@@ -19,25 +20,25 @@ class FriendRequests extends Component
 
     public function loadFriendRequests(): void
     {
-        $this->friendRequests = auth()->user()->friendRequests()->get();
+        $user = auth()->user();
+
+        $this->friendRequests = $user->pendingFriendRequestsFrom()->get();
     }
 
 
-    public function acceptFriendRequest($friendId): void
+    public function acceptFriendRequest($friendshipId): void
     {
-        auth()->user()->acceptFriendRequest($friendId);
+        FriendService::acceptFriendRequest($friendshipId);
 
         $this->loadFriendRequests();
     }
 
-    public function rejectFriendRequest($senderId): void
+    public function rejectFriendRequest($friendshipId): void
     {
-        auth()->user()->rejectFriendRequest($senderId);
+        FriendService::deleteFriendShip($friendshipId);
+
+        $this->loadFriendRequests();
     }
-
-
-
-
 
 
 

@@ -43,7 +43,7 @@
                         <div x-anchor="$refs.button" @click.outside="friendOptionsDropdown = false" x-show="friendOptionsDropdown" class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="display: none">
                             <div class="py-1" role="none">
                                 <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                                <button wire:click="deleteFriend({{ $friend->pivot->friend_id }}, {{ $friend->pivot->sender_id }})" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-200" role="menuitem" tabindex="-1" id="menu-item-0">Delete friend</button>
+                                <button wire:click="deleteFriend({{ $friend->pivot->id }})" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-200" role="menuitem" tabindex="-1" id="menu-item-0">Delete friend</button>
                             </div>
                         </div>
                     </div>

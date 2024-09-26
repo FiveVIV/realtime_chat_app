@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CheckChatParticipant;
 use App\Livewire\FriendList;
+use App\Livewire\FriendPending;
 use App\Livewire\FriendRequests;
 use App\Livewire\MessageBox;
 use App\Livewire\Profile;
@@ -26,13 +27,21 @@ Route::get("/profile", Profile::class)
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get("/friend/list", FriendList::class)
-    ->middleware(['auth'])
-    ->name('friend.list');
 
-Route::get("/friend/requests", FriendRequests::class)
-    ->middleware(['auth'])
-    ->name('friend.requests');
+
+Route::prefix("/friend")->name("friend.")->middleware("auth")->group(function () {
+    Route::get("/list", FriendList::class)
+        ->name('list');
+
+    Route::get("/requests", FriendRequests::class)
+        ->name('requests');
+
+    Route::get("/pending", FriendPending::class)
+        ->name('pending');
+});
+
+
+
 
 
 Route::prefix("notification")->group(function ( ) {

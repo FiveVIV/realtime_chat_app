@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Services\FriendService;
 use Exception;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Livewire\Component;
 
 class FriendList extends Component
@@ -26,33 +28,34 @@ class FriendList extends Component
 
     public function loadFriends(): void
     {
-        $this->friends = auth()->user()->friends()->get();
+        $user = auth()->user();
+
+        $this->friends = $user->friendsTo()->wherePivot("accepted", true)->get()->merge($user->friendsFrom()->wherePivot("accepted", true)->get());
     }
 
     public function getRandomNonFriends($limit = 3): void
     {
+        $user = auth()->user();
         $userId = auth()->id();
 
-        // Query to get $limit random users who are not friends or have pending friend requests with the current user
-        $this->randomNonFriends = User::where('id', '!=', $userId) // Exclude the current user
-        ->whereDoesntHave('friends', function ($query) use ($userId) {
-            // Exclude users where the current user is the sender or receiver
-            $query->where(function($subQuery) use ($userId) {
-                $subQuery->where('sender_id', $userId) // where current user is the friend_id
-                ->orWhere('friend_id', $userId); // where current user is the sender_id
-            });
-        })
-            ->whereDoesntHave('friendRequests', function ($query) use ($userId) {
-                // Additionally, exclude users who have pending friend requests involving the current user
-                $query->where(function($subQuery) use ($userId) {
-                    $subQuery->where('sender_id', $userId)
-                        ->orWhere('friend_id', $userId);
-                });
-            })
-            ->inRandomOrder() // Get random users
-            ->limit($limit) // Limit to $limit users
-            ->get();
+        // Get the user's current friends from the merged friendsTo and friendsFrom collections
+        $friendIds = $user->friendsTo()->get()->merge($user->friendsFrom()->get())->pluck('id')->toArray();
+
+        // Get pending friend requests involving the current user (sent and received)
+        $pendingFriendRequestIds = $user->pendingFriendRequestsTo()->get()->merge($user->pendingFriendRequestsFrom()->get())->pluck('id')->toArray();
+
+        // Merge friend IDs with pending friend request IDs to exclude both from the random users query
+        $excludedIds = array_merge($friendIds, $pendingFriendRequestIds);
+
+        // Query to get $limit random users who are not friends and don't have pending friend requests
+        $this->randomNonFriends = User::where('id', '!=', $userId) // Exclude current user
+        ->whereNotIn('id', $excludedIds) // Exclude current friends and users with pending friend requests
+        ->inRandomOrder() // Get random users
+        ->limit($limit) // Limit to $limit users
+        ->get();
     }
+
+
 
 
     public function refreshGetRandomNonFriends(): void
@@ -61,56 +64,16 @@ class FriendList extends Component
     }
 
 
-    public function deleteFriend($friendId, $senderId): void
+    public function deleteFriend($friendshipId): void
     {
-        // Get the authenticated user
-        $user = auth()->user();
-
-        // Detach the friendship relationship based on the provided sender and friend IDs
-        $user->friends()
-            ->wherePivot('sender_id', $senderId)
-            ->wherePivot('friend_id', $friendId)
-            ->detach([$friendId, $senderId]);
+        FriendService::deleteFriendship($friendshipId);
 
         // Reload the list of friends after detaching
         $this->loadFriends();
     }
 
 
-    public function sendFriendRequest($friendId = null)
-    {
-        // Validate if the $friendId belongs to a valid user
 
-        $friend = $friendId === null ? User::where("email", $this->email)->firstOrFail() : User::find($friendId);
-
-
-        if (!$friend) {
-            return response()->json(['error' => 'User not found.'], 404);
-        }
-
-        try {
-            // Check if a friend request already exists
-            $existingRequest = auth()->user()->friends()->wherePivot('friend_id', $friendId)->exists();
-
-            if (!$existingRequest) {
-                // Add a new friend request (pending)
-                auth()->user()->friends()->attach($friendId, ['accepted' => false]);
-
-                // Dispatch success notification
-                $this->dispatch("basic-notification", message: "Friend request sent.", button: ["label" => "Undo"]);
-
-            } else {
-                // Friendship request already exists
-                $this->dispatch("add-notification", message: "Friend request sent successfully.", type: "basic");
-            }
-        } catch (Exception $e) {
-            // Log the exception for debugging purposes
-            \Log::error("Friend request failed: " . $e->getMessage());
-
-            // Dispatch error notification
-            $this->dispatch("add-notification", message: "An error occurred while sending the friend request.", type: "basic");
-        }
-    }
 
 
 
